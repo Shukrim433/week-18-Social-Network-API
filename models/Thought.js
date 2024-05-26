@@ -16,11 +16,11 @@ const thoughtSchema = new Schema(
                 if (date) return date.toISOString().split("T") [0];
               }
         },
-        username: {    // the user that created this thought
+        username: {    // the user that posted this thought
             type: String,
             required: true,
         },
-        reactions: [
+        reactions: [    // essentially replies
             reactionSchema
         ]
     },
