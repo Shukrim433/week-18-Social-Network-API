@@ -4,9 +4,11 @@
 // post route - to create a new user
 // put route - to update a user by their id
 // delete route - to delete a user by their id and delete associated thoughts (not friends tho)
+// /api/users/:userId/friends/:friendId
+// post route - to add another user to this user's friends array
+// delete route - to remove a user from this user's friends array
 
-const { User } = require('../models');
-const { Thought } = require('../models');
+const { User, Thought } = require('../models');
 
 module.exports = {
 
@@ -85,6 +87,46 @@ module.exports = {
             res.status(200).json({message: 'user and associated thoughts deleted'})
 
         } catch (err) {
+            return res.status(500).json(err)
+        }
+    }, 
+
+
+    // add a user to another user's friends list
+    async addFriend(req, res) {
+        try {
+            const userData = await User.findOneAndUpdate(
+                { _id: req.params.userId },
+                { $addToSet: { friends: {_id: req.params.friendId}} },  // (if it doesnt already exist) adds a single user's id to this user's friends array 
+                { runValidators: true, new: true }
+            )
+
+            if(!userData) {
+                return res.status(404).json({message: 'no user with this _id found'})
+            }
+
+            res.status(200).json(userData)
+        } catch(err) {
+            return res.status(500).json(err)
+        }
+    },
+
+
+    // delete a user from another user's friends list
+    async deleteFriend(req, res) {
+        try {
+            const userData = await User.findOneAndUpdate(
+                { _id: req.params.userId },
+                { $pull: { friends: { _id: req.params.friendId } } },  // removes the friend's _id from the user's friends array
+                { runValidators: true, new: true }
+            )
+
+            if(!userData) {
+                return res.status(404).json({message: 'no user with this _id found'})
+            }
+
+            res.status(200).json(userData)
+        } catch(err) {
             return res.status(500).json(err)
         }
     }
