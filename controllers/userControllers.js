@@ -112,8 +112,8 @@ module.exports = {
     },
 
 
-    // delete a user from another user's friends list
-    async deleteFriend(req, res) {
+    // remove a user from another user's friends list
+    async removeFriend(req, res) {
         try {
             const userData = await User.findOneAndUpdate(
                 { _id: req.params.userId },
