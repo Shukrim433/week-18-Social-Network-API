@@ -50,7 +50,7 @@ module.exports = {
             }
 
             const userData = await User.findOneAndUpdate(
-                { _id: req.params.UserId },
+                { username: req.body.username },
                 { $addToSet: { thoughts: thoughtData._id } },
                 { runValidators: true, new: true }
         )
@@ -71,7 +71,7 @@ module.exports = {
         try {
             const thoughtData = await Thought.findOneAndUpdate(
                 { _id: req.params.thoughtId },
-                { $set: {thoughtText: req.body.thoughtText, username: req.body.username} },
+                { $set: req.body },
                 { runValidators: true, new: true}
             )
 
@@ -105,7 +105,7 @@ module.exports = {
     // add a reaction  to a thought's 'reactions' list
     async addReaction(req, res) {
         try {
-            const thoughtData  = await findOneAndUpdate(
+            const thoughtData  = await Thought.findOneAndUpdate(
                 { _id: req.params.thoughtId },
                 { $addToSet: {reactions: req.body} },
                 { runValidators: true, new: true }
@@ -126,7 +126,7 @@ module.exports = {
     async removeReaction(req, res) {
         try {
             const thoughtData = await Thought.findOneAndUpdate(
-                { _id: req.params.thougthId },
+                { _id: req.params.thoughtId },
                 { $pull: {reactions: {reactionId: req.params.reactionId}} },
                 {runValidators: true, new: true}
             )
