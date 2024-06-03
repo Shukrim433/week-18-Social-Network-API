@@ -95,7 +95,7 @@ module.exports = {
                 return res.status(404).json({message: 'no thought with this _id found'})
             }
 
-            res.status(200).json(thoughtData)
+            res.status(200).json({message: 'thought deleted successfully!'})
         } catch(err) {
             return res.status(500).json(err)
         }
