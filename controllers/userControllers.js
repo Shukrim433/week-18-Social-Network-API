@@ -57,7 +57,7 @@ module.exports = {
         try {
             const userData = await User.findOneAndUpdate(
                 {_id : req.params.userId},
-                {$set: {username: req.body.username, email: req.body.email}},
+                {$set: req.body},
                 {runValidators: true, new: true}
             )
 
@@ -117,7 +117,7 @@ module.exports = {
         try {
             const userData = await User.findOneAndUpdate(
                 { _id: req.params.userId },
-                { $pull: { friends: { _id: req.params.friendId } } },  // removes the friend's _id from the user's friends array
+                { $pull: { friends: req.params.friendId } },  // removes the friend's _id from the user's friends array
                 { runValidators: true, new: true }
             )
 
